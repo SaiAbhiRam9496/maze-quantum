@@ -47,31 +47,6 @@ npm run dev
 
 Open `http://localhost:5173` in your browser.
 
-## Project Structure
-
-src/
-├── maze/
-│   ├── generator.ts      # Generates random maze using recursive backtracking
-│   │                     # Each cell tracks its four walls and visited state
-│   │                     # Produces a perfect maze — exactly one path between any two cells
-│   │
-│   └── renderer.ts       # Draws the maze on an HTML canvas
-│                         # Renders walls, start/end markers, bot trail, and player position
-│
-├── bots/
-│   ├── quantumBot.ts     # QAOA-inspired pathfinding algorithm
-│   │                     # Builds graph, runs phase estimation, applies weighted Dijkstra
-│   │
-│   └── rlBot.ts          # Q-learning reference implementation (research purposes)
-│
-├── training/
-│   └── trainer.ts        # Training loop, episode management, and live metrics
-│
-├── ui/
-│   ├── TrainingRoom.tsx  # Left panel — run the quantum bot and see it go ready
-│   └── PlayRoom.tsx      # Right panel — manual play and bot animation on canvas
-│
-└── App.tsx               # Root component, maze state, and layout
 
 ## Why This Matters
 
