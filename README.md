@@ -1,73 +1,89 @@
-# React + TypeScript + Vite
+# Maze Quantum AI
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An interactive browser-based maze game that demonstrates quantum-inspired pathfinding. Built with React, TypeScript, and Tailwind CSS.
 
-Currently, two official plugins are available:
+## Live Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+[maze-quantum.vercel.app](https://maze-quantum-8rtempbts-saiabhiram9496s-projects.vercel.app/)
 
-## React Compiler
+## What is this?
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Maze Quantum AI is a 25x25 randomly generated maze game with two modes:
 
-## Expanding the ESLint configuration
+- **Play Manually** — navigate the maze using arrow keys
+- **Quantum Bot** — a QAOA-inspired algorithm solves the maze and animates the path in real time
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Every time you click "New Maze" a completely new maze is generated using a recursive backtracking algorithm, and the quantum bot recomputes the optimal path from scratch.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## How the Quantum Algorithm Works
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+The bot runs in three steps:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+**Step 1 — Graph Construction**
+The maze is converted into a graph. Every open cell is a node, every open wall between two cells is an edge.
+
+**Step 2 — Quantum Phase Estimation**
+Each edge is assigned a phase amplitude score. Edges closer to the direct path from start to end receive higher constructive interference scores. Edges far from the optimal direction receive lower scores — simulating destructive interference. This is inspired by how QAOA (Quantum Approximate Optimization Algorithm) works on real quantum hardware for pathfinding and logistics problems.
+
+**Step 3 — Quantum-Weighted Pathfinding**
+Dijkstra's algorithm runs on the graph using the quantum phase scores as edge weights. Edges with high constructive interference become cheaper to traverse — naturally guiding the algorithm toward the optimal path.
+
+The result is a path that mimics what a real quantum optimizer would produce on a QPU, simulated entirely in the browser.
+
+## Tech Stack
+
+- React 19
+- TypeScript
+- Tailwind CSS v4
+- Vite 6
+
+## Getting Started
+```bash
+git clone https://github.com/SaiAbhiRam9496/maze-quantum.git
+cd maze-quantum
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Open `http://localhost:5173` in your browser.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Project Structure
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+src/
+├── maze/
+│   ├── generator.ts      # Generates random maze using recursive backtracking
+│   │                     # Each cell tracks its four walls and visited state
+│   │                     # Produces a perfect maze — exactly one path between any two cells
+│   │
+│   └── renderer.ts       # Draws the maze on an HTML canvas
+│                         # Renders walls, start/end markers, bot trail, and player position
+│
+├── bots/
+│   ├── quantumBot.ts     # QAOA-inspired pathfinding algorithm
+│   │                     # Builds graph, runs phase estimation, applies weighted Dijkstra
+│   │
+│   └── rlBot.ts          # Q-learning reference implementation (research purposes)
+│
+├── training/
+│   └── trainer.ts        # Training loop, episode management, and live metrics
+│
+├── ui/
+│   ├── TrainingRoom.tsx  # Left panel — run the quantum bot and see it go ready
+│   └── PlayRoom.tsx      # Right panel — manual play and bot animation on canvas
+│
+└── App.tsx               # Root component, maze state, and layout
+
+## Why This Matters
+
+Quantum optimization algorithms like QAOA are actively used in:
+
+- Drone delivery pathfinding
+- Logistics and supply chain routing
+- Network traffic optimization
+- Game AI research
+
+This project demonstrates the core concept of quantum-weighted graph traversal running entirely client-side — no QPU, no backend, no server.
+
+## Author
+
+**Sai AbhiRam** — [github.com/SaiAbhiRam9496](https://github.com/SaiAbhiRam9496)
